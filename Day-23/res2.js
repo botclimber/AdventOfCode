@@ -13,7 +13,7 @@ Notes:
 const data = document.getElementsByTagName("pre")[0].textContent.split("\n")
 data.pop()
 
-const maxRounds = 10
+const maxRounds = 1000
 
 const checkMacth ={
 	'n': -2,
@@ -106,19 +106,24 @@ for (let rows in data){
 }
 
 // computation
-var rounds = 0
-while (rounds < maxRounds){
-	
+var round = 1
+
+while (round <= maxRounds){
+	var count = 0
 	var movableElves = []
+	
 	for (let x of elves){
 		if(!x.emptyAdj(elves)){
 			x.getConsPos()
 			x.cleanOccDirs()
 			movableElves.push(x)
-		}
+		
+		}else count++
 		
 		x.moveDir()
 	}
+	
+	if(count == elves.length) break
 	
 	// check matches
 	for (let x = 0; x < movableElves.length; x++){
@@ -138,8 +143,13 @@ while (rounds < maxRounds){
 		
 		if(move) movableElves[x].moveElv() 
 	}
+	
+	console.log("Round: "+round+ " | Count: "+count+" | Elves: "+elves.length)
+	round++
+	
+}
 
-	/*var matrix = []
+var matrix = []
 
 	for(let i = 0; i < 100 ; i++){
 		var arr = []
@@ -155,12 +165,9 @@ while (rounds < maxRounds){
 		matrix.push(arr)
 	}
 	
-	console.log(matrix)*/
-	
-	rounds++
-}
+	console.log(matrix)
 
-function getResult (elves){
+/*function getResult (elves){
 	var rows = []
 	var cols = []
 	for (let x of elves){
@@ -177,7 +184,7 @@ function getResult (elves){
 	var ans = ((maxRow - minRow) * (maxCol - minCol) - elves.length) 
 	
 	return ans
-}
+}*/
 
 
 //console.log(elves)
@@ -187,5 +194,3 @@ function getResult (elves){
 	for (x of elves) console.log(x.currentPos.row + " | "+ x.currentPos.col)
 }
 showAllElves(elves)*/
-
-console.log(getResult(elves))
