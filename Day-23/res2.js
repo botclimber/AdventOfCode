@@ -13,8 +13,6 @@ Notes:
 const data = document.getElementsByTagName("pre")[0].textContent.split("\n")
 data.pop()
 
-const maxRounds = 10000
-
 const checkMacth ={
 	'n': -2,
 	's': 2,
@@ -31,7 +29,8 @@ const toMove = {
 
 class Elve {
 
-	constructor(x,y){
+	constructor(x,y,id){
+		this.id = id
 		this.currentPos = {row:x ,col:y}
 		this.consPos = {row: 1e6, col: 1e6 }
 		this.dirs = ['n','s','w','e'],
@@ -40,12 +39,7 @@ class Elve {
 	}
 	
 	moveDir(){ this.dirs.push(this.dirs.shift()) }
-	/*moveDir(dir){ 
-		var idx = this.dirs.indexOf(dir)
-		var removedElement = this.dirs.splice(idx, 1)
-		this.dirs.push(removedElement)
-	}*/
-	
+
 	emptyAdj(elves){
 		var isEmpty = true
 		
@@ -99,9 +93,11 @@ class Elve {
 }
 
 var elves = []
+var id  = 0
 for (let rows in data){
 	for(let cols in data[rows]){
-		if(data[rows][cols] == '#') elves.push(new Elve(parseInt(rows)+10, parseInt(cols)+10))
+		if(data[rows][cols] == '#') elves.push(new Elve(parseInt(rows), parseInt(cols), id))
+		id++
 	}
 }
 
@@ -123,72 +119,33 @@ while (true){
 	}
 	
 	round++
-	
 	console.log("Round: "+round+ " | Count: "+count+" | Elves: "+elves.length)
+	
 	if(count == elves.length) break
 	
 	// check matches
+	var elvesThatNotMove = []
 	for (let x = 0; x < movableElves.length; x++){
 		
 		var cPos = [movableElves[x].consPos.row, movableElves[x].consPos.col]
 		var move = true
 		
 		for(let y = 0; y < movableElves.length; y++){
-			if (x == y) continue
-			else{
+			if (x != y){ 
 				if(cPos[0] == movableElves[y].consPos.row && cPos[1] == movableElves[y].consPos.col){
-				move = false
-				break
+					
+					elvesThatNotMove.push(movableElves[x])
+					move = false
+					break
 				}
 			}
 		}
 		
 		if(move) movableElves[x].moveElv() 
 	}
-}
 
-var matrix = []
-
-	for(let i = 0; i < 100 ; i++){
-		var arr = []
-		
-		for(let j = 0; j < 100; j++){
-			var charc = '.'
-			for(let el of elves){
-				if(el.currentPos.row == i && el.currentPos.col == j) charc = '#'
-			}
-			
-			arr.push(charc)
-		}
-		matrix.push(arr)
+	for(let elv of elvesThatNotMove){
+		elv.consPos.row = elv.currentPos.row
+		elv.consPos.col = elv.currentPos.col
 	}
-	
-	console.log(matrix)
-
-/*function getResult (elves){
-	var rows = []
-	var cols = []
-	for (let x of elves){
-		rows.push(x.currentPos.row)
-		cols.push(x.currentPos.col)
-	}
-	
-	var maxRow = Math.max(...rows) + 1
-	var maxCol = Math.max(...cols) + 1
-	var minRow = Math.min(...rows)
-	var minCol = Math.min(...cols)
-	
-	console.log(maxRow +" | "+minRow+" | "+maxCol+" | "+minCol)
-	var ans = ((maxRow - minRow) * (maxCol - minCol) - elves.length) 
-	
-	return ans
-}*/
-
-
-//console.log(elves)
-
-/*function showAllElves(elves){
-	
-	for (x of elves) console.log(x.currentPos.row + " | "+ x.currentPos.col)
 }
-showAllElves(elves)*/

@@ -40,12 +40,7 @@ class Elve {
 	}
 	
 	moveDir(){ this.dirs.push(this.dirs.shift()) }
-	/*moveDir(dir){ 
-		var idx = this.dirs.indexOf(dir)
-		var removedElement = this.dirs.splice(idx, 1)
-		this.dirs.push(removedElement)
-	}*/
-	
+
 	emptyAdj(elves){
 		var isEmpty = true
 		
@@ -121,17 +116,19 @@ while (rounds < maxRounds){
 	}
 	
 	// check matches
+	var elvesThatNotMove = []
 	for (let x = 0; x < movableElves.length; x++){
 		
 		var cPos = [movableElves[x].consPos.row, movableElves[x].consPos.col]
 		var move = true
 		
 		for(let y = 0; y < movableElves.length; y++){
-			if (x == y) continue
-			else{
+			if (x != y){ 
 				if(cPos[0] == movableElves[y].consPos.row && cPos[1] == movableElves[y].consPos.col){
-				move = false
-				break
+					
+					elvesThatNotMove.push(movableElves[x])
+					move = false
+					break
 				}
 			}
 		}
@@ -139,23 +136,10 @@ while (rounds < maxRounds){
 		if(move) movableElves[x].moveElv() 
 	}
 
-	/*var matrix = []
-
-	for(let i = 0; i < 100 ; i++){
-		var arr = []
-		
-		for(let j = 0; j < 100; j++){
-			var charc = '.'
-			for(let el of elves){
-				if(el.currentPos.row == i && el.currentPos.col == j) charc = '#'
-			}
-			
-			arr.push(charc)
-		}
-		matrix.push(arr)
+	for(let elv of elvesThatNotMove){
+		elv.consPos.row = elv.currentPos.row
+		elv.consPos.col = elv.currentPos.col
 	}
-	
-	console.log(matrix)*/
 	
 	rounds++
 }
@@ -173,19 +157,9 @@ function getResult (elves){
 	var minRow = Math.min(...rows)
 	var minCol = Math.min(...cols)
 	
-	console.log(maxRow +" | "+minRow+" | "+maxCol+" | "+minCol)
 	var ans = ((maxRow - minRow) * (maxCol - minCol) - elves.length) 
 	
 	return ans
 }
-
-
-//console.log(elves)
-
-/*function showAllElves(elves){
-	
-	for (x of elves) console.log(x.currentPos.row + " | "+ x.currentPos.col)
-}
-showAllElves(elves)*/
 
 console.log(getResult(elves))
