@@ -116,6 +116,8 @@ while (true){
 			x.getConsPos()
 			x.cleanOccDirs()
 			movableElves.push(x)
+			
+			console.log(x)
 		
 		}else count++
 		
@@ -146,49 +148,3 @@ while (true){
 		if(move) movableElves[x].moveElv() 
 	}
 }
-
-var matrix = []
-
-	for(let i = 0; i < 100 ; i++){
-		var arr = []
-		
-		for(let j = 0; j < 100; j++){
-			var charc = '.'
-			for(let el of elves){
-				if(el.currentPos.row == i && el.currentPos.col == j) charc = '#'
-			}
-			
-			arr.push(charc)
-		}
-		matrix.push(arr)
-	}
-	
-	console.log(matrix)
-
-/*function getResult (elves){
-	var rows = []
-	var cols = []
-	for (let x of elves){
-		rows.push(x.currentPos.row)
-		cols.push(x.currentPos.col)
-	}
-	
-	var maxRow = Math.max(...rows) + 1
-	var maxCol = Math.max(...cols) + 1
-	var minRow = Math.min(...rows)
-	var minCol = Math.min(...cols)
-	
-	console.log(maxRow +" | "+minRow+" | "+maxCol+" | "+minCol)
-	var ans = ((maxRow - minRow) * (maxCol - minCol) - elves.length) 
-	
-	return ans
-}*/
-
-
-//console.log(elves)
-
-/*function showAllElves(elves){
-	
-	for (x of elves) console.log(x.currentPos.row + " | "+ x.currentPos.col)
-}
-showAllElves(elves)*/
